@@ -23,7 +23,8 @@
     <body>
         <div class="container">
             <h1>
-                <img class="flag" data-key="fc_icon_url" data-attr="src" /> Covid stats for <span data-key="location"></span>
+                <img id="flag-icon" class="flag" data-key="fc_icon_url" data-attr="src" /> Covid stats for
+                <span data-key="location"></span>
             </h1>
 
             <h2 data-key="fc_herd_immunity_ms" data-format="dateoffset"></h2>
@@ -83,7 +84,7 @@
                     <div data-slot="icon"><i class="fa-solid fa-virus"></i></div>
                     <div data-slot="title">New cases</div>
                     <div data-slot="body">
-                        <span data-key="new_cases_smoothed" data-format="number"></span>
+                        <span data-key="new_cases_smoothed" data-format="largenumber"></span>
                     </div>
                 </div>
 
@@ -91,7 +92,7 @@
                     <div data-slot="icon"><i class="fa-solid fa-skull"></i></div>
                     <div data-slot="title">New deaths</div>
                     <div data-slot="body">
-                        <span data-key="new_deaths_smoothed" data-format="number"></span>
+                        <span data-key="new_deaths_smoothed" data-format="largenumber"></span>
                     </div>
                 </div>
 

@@ -80,8 +80,12 @@
     }
 
     function convertCountryCode(iso3) {
-        let flagName = Countries.filter((c) => c[1] == iso3)[0][0] || 'world'
-        return flagName.toLowerCase()
+        let country = FindCountry(iso3)
+        if (country != null) {
+            return country.iso2.toLowerCase()
+        } else {
+            return 'world'
+        }
     }
 
     let region = getRegionParameter()

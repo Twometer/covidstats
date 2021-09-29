@@ -250,3 +250,17 @@ window.Countries = [
     ['SS', 'SSD', '728', 'ISO 3166-2:SS'],
     ['XK', 'XKX', '983', 'ISO 3166-2:XK'],
 ]
+
+window.FindCountry = (iso3) => {
+    let mapped = Countries.map((c) => {
+        return {
+            iso2: c[0],
+            iso3: c[1],
+            numerical: c[2],
+            isoFull: c[3],
+        }
+    })
+    let candidates = mapped.filter((c) => c.iso3 === iso3)
+    if (candidates.length != 1) return null
+    return candidates[0]
+}
