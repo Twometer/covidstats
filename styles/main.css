@@ -29,6 +29,11 @@ header {
     margin-left: 2rem;
 }
 
+.location-switcher {
+    color: unset;
+    text-decoration-style: dotted;
+}
+
 .flag {
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
     border-radius: 4px;
@@ -73,7 +78,7 @@ header {
     width: calc(var(--progress-value) - 2 * var(--margin));
     transition-duration: 0.3s;
 }
-.vacc-progress-bar-progress.low {
+.progressbar.low {
     color: #445;
     text-align: left;
     transition-duration: 0.3s;
@@ -129,4 +134,41 @@ header {
 footer {
     margin-top: 4rem;
     font-size: 0.75rem;
+}
+
+#regionSwitcherModal .search-box {
+    border-bottom: 1px solid #dee2e6;
+}
+
+#regionSwitcherModal .search-box i {
+    display: inline-block;
+    padding: 1rem;
+}
+
+#regionSwitcherModal .search-box input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+}
+
+#regionSwitcherModal .modal-body {
+    padding: 0;
+    max-height: 75vh;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+#regionSwitcherModal .list-group-flush {
+    border-radius: 4px;
+}
+
+#regionSwitcherModal img {
+    width: 2rem;
+    height: 1.5rem;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+#regionSwitcherModal .country-title {
+    display: inline-block;
+    margin-left: 0.5rem;
 }

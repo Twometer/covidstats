@@ -24,7 +24,16 @@
         <div class="container">
             <header>
                 <img id="flag-icon" class="flag" data-key="fc_icon_url" data-attr="src" />
-                <div class="header-text">Covid stats for <span data-key="location"></span></div>
+                <div class="header-text">
+                    Covid stats for
+                    <a
+                        href="#"
+                        class="location-switcher"
+                        data-bs-toggle="modal"
+                        data-bs-target="#regionSwitcherModal"
+                        data-key="location"
+                    ></a>
+                </div>
             </header>
 
             <section class="main-section">
@@ -163,10 +172,35 @@
                     <a href="https://github.com/Twometer/covidstats">github.com/Twometer</a>.
                 </p>
             </footer>
+
+            <div class="modal fade" id="regionSwitcherModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Switch region</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="d-flex align-items-center search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="region-switcher-search" type="text" placeholder="Search..." />
+                        </div>
+                        <div class="modal-body">
+                            <div class="list-group list-group-flush" id="region-switcher-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
     <script src="scripts/template.js"></script>
     <script src="scripts/humanize.js"></script>
     <script src="scripts/countries.js"></script>
     <script src="scripts/main.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"
+        async
+        defer
+    ></script>
 </html>

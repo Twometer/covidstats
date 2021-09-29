@@ -4,10 +4,12 @@
     const herdImmunity = 0.8
     const flagPath = 'images/flags'
     const fallbackRegion = 'OWID_WRL'
-    const fallbackFlag = `${flagPath}/sekai.svg`
+    const fallbackFlag = `sekai`
 
     const progressBarElem = document.getElementById('progress')
     const flagIconElem = document.getElementById('flag-icon')
+    const regionSwitcherListElem = document.getElementById('region-switcher-list')
+    const regionSwitcherSearchElem = document.getElementById('region-switcher-search')
 
     function loadJson(url) {
         return new Promise((resolve, reject) => {
@@ -92,7 +94,7 @@
     function findFlagName(iso3) {
         let country = FindCountry(iso3)
         if (country != null) return country.iso2.toLowerCase()
-        else return ''
+        else return fallbackFlag
     }
 
     function determineProgressColor(value) {
@@ -122,5 +124,30 @@
     injectProperties(region)
     setProgress(region.stats.fc_progress_full)
 
-    flagIconElem.onerror = () => (flagIconElem.src = fallbackFlag)
+    flagIconElem.onerror = () => (flagIconElem.src = `${flagPath}/${fallbackFlag}.svg`)
+
+    for (var regionCode in owidData) {
+        let html = `
+        <a href="?region=${regionCode}" class="list-group-item list-group-item-action" data-code="${regionCode}">
+            <img src="images/flags/${findFlagName(regionCode)}.svg" />
+            <span class="country-title">${owidData[regionCode].location}</span>
+        </a>`
+
+        let node = document.createElement('a')
+        regionSwitcherListElem.appendChild(node)
+        node.outerHTML = html
+    }
+
+    regionSwitcherSearchElem.oninput = () => {
+        let query = regionSwitcherSearchElem.value.toLowerCase()
+        let items = regionSwitcherListElem.getElementsByClassName('list-group-item')
+        for (let item of items) {
+            let regionName = owidData[item.getAttribute('data-code')].location.toLowerCase()
+            if (regionName.startsWith(query)) {
+                item.style.display = 'block'
+            } else {
+                item.style.display = 'none'
+            }
+        }
+    }
 })()
