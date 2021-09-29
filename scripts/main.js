@@ -6,6 +6,9 @@
     const fallbackRegion = 'OWID_WRL'
     const fallbackFlag = `${flagPath}/sekai.svg`
 
+    const progressBarElem = document.getElementById('progress')
+    const flagIconElem = document.getElementById('flag-icon')
+
     function loadJson(url) {
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest()
@@ -22,38 +25,6 @@
             }
             xhr.send()
         })
-    }
-
-    function computeForecast(region) {
-        // Vaccination progress
-        region.fc_progress_partial = region.people_vaccinated / region.population
-
-        region.fc_progress_full = region.people_fully_vaccinated / region.population
-
-        // Herd immunity forecast
-        let requiredVaccinations = 2 * herdImmunity * region.population
-        let remainingVaccinations = Math.max(0, requiredVaccinations - region.total_vaccinations)
-        let remainingDays = Math.round(remainingVaccinations / region.new_vaccinations_smoothed)
-        region.fc_remaining_vaccines = remainingVaccinations
-        region.fc_herd_immunity_ms = remainingDays * (24 * 60 * 60 * 1000)
-        region.fc_herd_immunity_days = remainingDays
-    }
-
-    function injectData(region) {
-        let regionData = owidData[region]
-        computeForecast(regionData)
-        regionData.fc_icon_url = `${flagPath}/${convertCountryCode(region)}.svg`
-
-        let targetElements = document.querySelectorAll('[data-key]')
-        for (let elem of targetElements) {
-            let key = elem.getAttribute('data-key')
-            let format = elem.getAttribute('data-format') || 'raw'
-            let attr = elem.getAttribute('data-attr')
-            let val = Humanize[format](regionData[key])
-            if (!attr) elem.innerText = val
-            else elem.setAttribute(attr, val)
-        }
-        console.log(regionData)
     }
 
     function parseSearchString(str) {
@@ -74,14 +45,51 @@
         return result
     }
 
-    function getRegionParameter() {
+    function computeProperties(region) {
+        // Vaccination progress
+        region.stats.fc_progress_partial = region.stats.people_vaccinated / region.stats.population
+        region.stats.fc_progress_full = region.stats.people_fully_vaccinated / region.stats.population
+
+        // Herd immunity forecast
+        let requiredVaccinations = 2 * herdImmunity * region.stats.population
+        let remainingVaccinations = Math.max(0, requiredVaccinations - region.stats.total_vaccinations)
+        let remainingDays = Math.round(remainingVaccinations / region.stats.new_vaccinations_smoothed)
+        region.stats.fc_remaining_vaccines = remainingVaccinations
+        region.stats.fc_herd_immunity_ms = remainingDays * (24 * 60 * 60 * 1000)
+        region.stats.fc_herd_immunity_days = remainingDays
+
+        // Icon
+        region.stats.fc_icon_url = `${flagPath}/${findFlagName(region.code)}.svg`
+    }
+
+    function injectProperties(region) {
+        let targetElements = document.querySelectorAll('[data-key]')
+        for (let elem of targetElements) {
+            let key = elem.getAttribute('data-key')
+            let format = elem.getAttribute('data-format') || 'raw'
+            let attr = elem.getAttribute('data-attr')
+            let val = Humanize[format](region.stats[key])
+            if (!attr) elem.innerText = val
+            else elem.setAttribute(attr, val)
+        }
+    }
+
+    function getSelectedRegionCode() {
         let query = parseSearchString(window.location.search)
         if (!query.region) return fallbackRegion
         if (!owidData[query.region.toUpperCase()]) return fallbackRegion
         return query.region.toUpperCase()
     }
 
-    function convertCountryCode(iso3) {
+    function getSelectedRegion() {
+        let code = getSelectedRegionCode()
+        return {
+            code,
+            stats: owidData[code],
+        }
+    }
+
+    function findFlagName(iso3) {
         let country = FindCountry(iso3)
         if (country != null) return country.iso2.toLowerCase()
         else return ''
@@ -95,27 +103,24 @@
     }
 
     function setProgress(value) {
-        let progressElement = document.getElementById('progress')
         let humanized = Humanize.percentage(value)
 
         // Set low-value special styles
-        if (value < 0.035) progressElement.classList.add('low')
-        else progressElement.classList.remove('low')
+        if (value < 0.035) progressBarElem.classList.add('low')
+        else progressBarElem.classList.remove('low')
 
         // Set progress value
-        progressElement.innerHTML = humanized
+        progressBarElem.innerHTML = humanized
 
         // Set progress color
-        progressElement.style.setProperty('--progress-color', determineProgressColor(value))
-        progressElement.style.setProperty('--progress-value', humanized)
+        progressBarElem.style.setProperty('--progress-color', determineProgressColor(value))
+        progressBarElem.style.setProperty('--progress-value', humanized)
     }
 
-    let region = getRegionParameter()
-    injectData(region)
-    setProgress(owidData[region].fc_progress_full)
+    let region = getSelectedRegion()
+    computeProperties(region)
+    injectProperties(region)
+    setProgress(region.stats.fc_progress_full)
 
-    let flagIcon = document.getElementById('flag-icon')
-    flagIcon.onerror = () => {
-        flagIcon.src = fallbackFlag
-    }
+    flagIconElem.onerror = () => (flagIconElem.src = fallbackFlag)
 })()
