@@ -22,13 +22,21 @@
     </head>
     <body>
         <div class="container">
-            <h1>
-                <img id="flag-icon" class="flag" data-key="fc_icon_url" data-attr="src" /> Covid stats for
-                <span data-key="location"></span>
-            </h1>
+            <header>
+                <img id="flag-icon" class="flag" data-key="fc_icon_url" data-attr="src" />
+                <div class="header-text">Covid stats for <span data-key="location"></span></div>
+            </header>
 
-            <h2 data-key="fc_herd_immunity_ms" data-format="dateoffset"></h2>
-            <h2 data-key="fc_herd_immunity_days" data-format="number"></h2>
+            <section class="main-section">
+                <h2 data-key="fc_herd_immunity_ms" data-format="dateoffset"></h2>
+                <h4 class="text-muted">
+                    <span data-key="fc_herd_immunity_days" data-format="number"></span> day(s) until immunity
+                </h4>
+
+                <div class="progressbar-container">
+                    <div class="progressbar" id="progress">0%</div>
+                </div>
+            </section>
 
             <div data-new-template="covidcard">
                 <div class="card" style="width: 17rem">
@@ -50,9 +58,7 @@
                 </div>
             </div>
 
-            <hr />
-
-            <section>
+            <section class="stats-section">
                 <div data-template="covidcard">
                     <div data-slot="icon"><i class="fa-solid fa-person"></i></div>
                     <div data-slot="title">Population</div>
@@ -79,7 +85,7 @@
 
             <hr />
 
-            <section>
+            <section class="stats-section">
                 <div data-template="covidcard">
                     <div data-slot="icon"><i class="fa-solid fa-virus"></i></div>
                     <div data-slot="title">New cases</div>
@@ -147,12 +153,13 @@
 
             <footer class="text-muted">
                 <p>
-                    <strong>Note:</strong> Estimations assume linear vaccination rate as of today. Values are 7-day averages.
-                    Last updated on <span data-key="last_updated_date" data-format="date"></span>. This is not an official
-                    source, and this is not funded by or associated with any government, country, or medical institution. The
-                    information shown here is calculated based on the information from the
-                    <a href="https://github.com/owid/covid-19-data">OurWorldInData GitHub</a>. No responsibility can be taken
-                    for this information. Full source code of this website available at
+                    <strong>Note:</strong> Estimations assume linear vaccination rate as of today and a required herd
+                    immunity of 80%. Values are 7-day averages. Last updated on
+                    <span data-key="last_updated_date" data-format="date"></span>. This is not an official source, and it is
+                    not funded by or associated with any government, country, or medical institution. The information shown
+                    here is calculated based on information from
+                    <a href="https://github.com/owid/covid-19-data">OurWorldInData</a>. No responsibility can be taken for
+                    this information. Full source code of this website available at
                     <a href="https://github.com/Twometer/covidstats">github.com/Twometer</a>
                 </p>
             </footer>

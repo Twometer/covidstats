@@ -87,8 +87,32 @@
         else return ''
     }
 
+    function determineProgressColor(value) {
+        const colors = ['#c0392b', '#e74c3c', '#e67e22', '#2ecc71', '#9b59b6']
+        const colorBandWidth = 1 / colors.length
+        let colorIdx = Math.min(Math.floor(value / colorBandWidth), colors.length - 1)
+        return colors[colorIdx]
+    }
+
+    function setProgress(value) {
+        let progressElement = document.getElementById('progress')
+        let humanized = Humanize.percentage(value)
+
+        // Set low-value special styles
+        if (value < 0.035) progressElement.classList.add('low')
+        else progressElement.classList.remove('low')
+
+        // Set progress value
+        progressElement.innerHTML = humanized
+
+        // Set progress color
+        progressElement.style.setProperty('--progress-color', determineProgressColor(value))
+        progressElement.style.setProperty('--progress-value', humanized)
+    }
+
     let region = getRegionParameter()
     injectData(region)
+    setProgress(owidData[region].fc_progress_full)
 
     let flagIcon = document.getElementById('flag-icon')
     flagIcon.onerror = () => {

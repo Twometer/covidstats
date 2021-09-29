@@ -3,6 +3,11 @@
     --bs-body-color: #344767;
 }
 
+hr {
+    background-color: #aaa;
+    margin: 2rem 0;
+}
+
 body {
     padding-top: 1rem;
 }
@@ -13,6 +18,17 @@ body {
     }
 }
 
+header {
+    font-size: 2.25rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+.header-text {
+    margin-top: -5px;
+    margin-left: 2rem;
+}
+
 .flag {
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
     border-radius: 4px;
@@ -20,7 +36,51 @@ body {
     height: 3rem;
 }
 
+.main-section {
+    text-align: center;
+    margin: 6rem 0;
+}
+
+.stats-section {
+    text-align: center;
+}
+
+.progressbar-container {
+    --height: 3rem;
+    height: var(--height);
+    display: block;
+    margin: 3rem auto;
+    border: 1px solid white;
+    background: white;
+    border-radius: calc(2 * var(--height));
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
+    width: 95%;
+}
+
+.progressbar {
+    --margin: 0.5rem;
+    --progress-color: #2ecc71;
+    --progress-value: 0%;
+    display: block;
+    border-radius: calc(2 * var(--height));
+    height: calc(100% - 2 * var(--margin));
+    margin: var(--margin);
+    background-color: var(--progress-color);
+    box-shadow: 0px 0px 6px 0px var(--progress-color);
+    color: white;
+    text-align: center;
+    padding-top: 2px;
+    width: calc(var(--progress-value) - 2 * var(--margin));
+    transition-duration: 0.3s;
+}
+.vacc-progress-bar-progress.low {
+    color: #445;
+    text-align: left;
+    transition-duration: 0.3s;
+}
+
 .card {
+    text-align: left;
     display: inline-block;
     border: 0;
     border-radius: 1rem;
