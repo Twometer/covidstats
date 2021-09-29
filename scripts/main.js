@@ -1,8 +1,10 @@
 ;(async function () {
     const owidUrl = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/latest/owid-covid-latest.json'
     const owidData = await loadJson(owidUrl)
-    const defaultRegion = 'OWID_WRL'
     const herdImmunity = 0.8
+    const flagPath = 'images/flags'
+    const fallbackRegion = 'OWID_WRL'
+    const fallbackFlag = `${flagPath}/sekai.svg`
 
     function loadJson(url) {
         return new Promise((resolve, reject) => {
@@ -40,7 +42,7 @@
     function injectData(region) {
         let regionData = owidData[region]
         computeForecast(regionData)
-        regionData.fc_icon_url = 'images/flags/' + convertCountryCode(region) + '.svg'
+        regionData.fc_icon_url = `${flagPath}/${convertCountryCode(region)}.svg`
 
         let targetElements = document.querySelectorAll('[data-key]')
         for (let elem of targetElements) {
@@ -74,20 +76,22 @@
 
     function getRegionParameter() {
         let query = parseSearchString(window.location.search)
-        if (!query.region) return defaultRegion
-        if (!owidData[query.region.toUpperCase()]) return defaultRegion
+        if (!query.region) return fallbackRegion
+        if (!owidData[query.region.toUpperCase()]) return fallbackRegion
         return query.region.toUpperCase()
     }
 
     function convertCountryCode(iso3) {
         let country = FindCountry(iso3)
-        if (country != null) {
-            return country.iso2.toLowerCase()
-        } else {
-            return 'world'
-        }
+        if (country != null) return country.iso2.toLowerCase()
+        else return ''
     }
 
     let region = getRegionParameter()
     injectData(region)
+
+    let flagIcon = document.getElementById('flag-icon')
+    flagIcon.onerror = () => {
+        flagIcon.src = fallbackFlag
+    }
 })()
